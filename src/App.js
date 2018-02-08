@@ -3,7 +3,7 @@ import './App.css';
 import { Store } from './Comonad';
 import IncDec from './IncDec';
 
-const incdec = Store(0, IncDec);
+const incdec = Store(IncDec)({});
 
 
 class App extends Component {

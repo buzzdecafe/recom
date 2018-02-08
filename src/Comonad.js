@@ -1,11 +1,11 @@
 const o = (f, g) => x => f(g(x));
 
 // the basic comonad
-const Store = (here, view) => ({  
-    map:       f  => Store(here, o(f, view)),
-    duplicate: () => Store(here, next => Store(next, view)),
+const Store = view => here => ({  
+    map:       f  => Store(o(f, view))(here),
+    duplicate: () => Store(next => Store(view)(next))(here),
     extract:   () => view(here),
-    move:      h  => Store(h, view)
+    move:      h  => Store(view)(h)
 });
 
 export { Store }

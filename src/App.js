@@ -1,35 +1,44 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Store } from './Comonad';
+//import { Store } from './Comonad';
+//import IncDec from './IncDec';
+import Button from './Button';
+import StoreMaker from './StoreMaker';
 import IncDec from './IncDec';
 
-const incdec = Store(IncDec)({});
+// Store (s -> a) s
+// where `s` is State and `a` is DOM)
 
+// Store (s -> a) s
+// where `s` is ??? and `a` ia a Component (i.e. State -> DOM)
+const ButtonMaker = StoreMaker(Button);
+const Plus1 = ButtonMaker({f: n => n + 1, label: '+'});
+const Minus1 = ButtonMaker({f: n => n - 1, label: '-'});
 
 class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { n: 0 };
+  constructor() {
+    super();
+    this.state = {n: 0};
   }
 
-  inc() {
-    this.setState({n: this.state.n + 1});
-  }
-
-  dec() {
-    this.setState({n: this.state.n - 1});
+  update(f) {
+    this.setState({n: f(this.state.n)})
   }
 
   render() {
-    const inc = this.inc.bind(this);
-    const dec = this.dec.bind(this);
-    const n = this.state.n;
-
     return (
       <div className="App">
         <div>
-          {incdec.move({n, inc, dec}).extract()}
+          <Plus1 update={this.update.bind(this)} />
+          {this.state.n}
+          <Minus1 update={this.update.bind(this)} />
+        </div>
+
+        <div>
+          <IncDec n={this.state.n}
+                  inc={() => this.update(n => n + 1)}
+                  dec={() => this.update(n => n - 1)}
+          />
         </div>
 
       </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Store } from './Comonad';
 
 
 export default function IncDec(props) {
